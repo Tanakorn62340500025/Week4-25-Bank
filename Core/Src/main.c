@@ -123,7 +123,7 @@ int main(void)
 	  {
 		  if(HAL_GetTick() - TimeStamp >= 1000)
 		  {
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 		  }
 	  }
   }
