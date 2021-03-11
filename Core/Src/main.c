@@ -47,6 +47,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint32_t ADCData[4]={0};     //week
+uint32_t TimeStamp = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,7 +98,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   HAL_ADC_Start_DMA(&hadc1, ADCData, 4);      //week
-  //uint32_t TimeStamp = 0;
+
   //uint32_t mode = 0;
 
   /* USER CODE END 2 */
@@ -113,6 +114,10 @@ int main(void)
 	  //{
 		  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 	  //}
+	  if(HAL_GetTick() - TimeStamp >= 1000)
+	  {
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -326,10 +331,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week
 {
 	//if(mode == 0)
 	//{
+
 		if(GPIO_Pin == GPIO_PIN_13)     //week
 		{
-			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);  //week
+			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);  //week
 			//TimeStamp = HAL_GetTick()
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+			TimeStamp = HAL_GetTick();
+
+
 		}
 	//}
 	//else
