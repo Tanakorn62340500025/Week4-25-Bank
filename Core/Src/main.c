@@ -48,6 +48,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 uint32_t ADCData[4]={0};     //week
 uint32_t TimeStamp = 0;
+uint32_t mode = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -118,6 +119,7 @@ int main(void)
 	  {
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 	  }
+
   }
   /* USER CODE END 3 */
 }
@@ -336,9 +338,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week
 		{
 			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);  //week
 			//TimeStamp = HAL_GetTick()
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-			TimeStamp = HAL_GetTick();
-
+			if(mode == 0)
+			{
+				HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+				if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_SET)
+				{
+					mode = 1;
+				}
+			}
+			else if(mode == 1)
+			{
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+				mode = 2;
+				TimeStamp = HAL_GetTick();
+			}
 
 		}
 	//}
