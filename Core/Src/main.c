@@ -115,11 +115,17 @@ int main(void)
 	  //{
 		  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 	  //}
-	  if(HAL_GetTick() - TimeStamp >= 1000)
+	  //if(HAL_GetTick() - TimeStamp >= 1000)
+	  //{
+		  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+	  //}
+	  if(mode == 2)
 	  {
-		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+		  if(HAL_GetTick() - TimeStamp >= 1000)
+		  {
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+		  }
 	  }
-
   }
   /* USER CODE END 3 */
 }
