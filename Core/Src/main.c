@@ -50,6 +50,7 @@ uint32_t ADCData[4]={0};     //week
 uint32_t TimeStamp = 0;
 uint32_t mode = 0;
 uint32_t Timer = 0;
+uint32_t TimeStampForTimer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -125,7 +126,8 @@ int main(void)
 		  if(HAL_GetTick() - TimeStamp >= (1000 + (((22695477*ADCData[0])+ADCData[1])%10000)))
 		  {
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-
+			  TimeStampForTimer = HAL_GetTick();
+			  mode = 3;
 		  }
 	  }
   }
@@ -337,12 +339,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week //เข้าทั้ง กด เเละ ปล่อย
 {
 	//if(mode == 0)
 	//{
 
-		if(GPIO_Pin == GPIO_PIN_13)     //week
+		if(GPIO_Pin == GPIO_PIN_13)     //week //เข้าต่อเมื่อกดเท่านั้น
 		{
 			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);  //week
 			//TimeStamp = HAL_GetTick()
@@ -359,6 +361,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 				mode = 2;
 				TimeStamp = HAL_GetTick();
+			}
+			else if(mode == 3)
+			{
+				Timer = HAL_GetTick() - TimeStampForTimer;
 			}
 
 		}
