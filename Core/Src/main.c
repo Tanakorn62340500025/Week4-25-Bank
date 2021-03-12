@@ -134,6 +134,7 @@ int main(void)
 			  mode = 3;
 		  }
 	  }
+	  //ตอนปล่อยปุ่มสีฟ้าบนบอร์ด case ข้างล่างนี้
 	  else if(SwitchState[0] == GPIO_PIN_SET && SwitchState[1] == GPIO_PIN_RESET && mode == 3)
 	  {
 		  Timer = HAL_GetTick() - TimeStampForTimer;

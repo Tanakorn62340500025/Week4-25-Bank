@@ -459,6 +459,7 @@ int main(void)
  8000572:	e016      	b.n	80005a2 <main+0xca>
 		  }
 	  }
+	  //ตอนปล่อยปุ่มสีฟ้าบนบอร์ด case ข้างล่างนี้
 	  else if(SwitchState[0] == GPIO_PIN_SET && SwitchState[1] == GPIO_PIN_RESET && mode == 3)
  8000574:	4b11      	ldr	r3, [pc, #68]	; (80005bc <main+0xe4>)
  8000576:	781b      	ldrb	r3, [r3, #0]
