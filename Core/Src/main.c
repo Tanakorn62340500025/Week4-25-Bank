@@ -51,6 +51,8 @@ uint32_t TimeStamp = 0;
 uint32_t mode = 0;
 uint32_t Timer = 0;
 uint32_t TimeStampForTimer = 0;
+GPIO_PinState SwitchState[2];
+uint32_t lookgettick = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,9 +110,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+  while (1)    //ถ้าไม่กด interrupt โปรเเกรมจะทำงานใน while ไปเรื่อยๆ เเต่ถ้ากด interrupt โปรเเกรมจะไปทำใน function void เเละเมื่อทำเสร็จก็จะกลับมาที่ while ต่อ
   {
-    /* USER CODE END WHILE */
+    /* USER CODE END WHILE */    //เท่าที่ดูเหมือนว่ามันจะเข้า function void เมื่อกดเท่านั้นปล่อยเหมือนจะไม่เข้า
 
     /* USER CODE BEGIN 3 */
 	  //if(HAL_GetTick() - TimeStamp >= (1000+(((22695477*ADCData[0])+ADCData[1])%10000)))
@@ -121,6 +123,8 @@ int main(void)
 	  //{
 		  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 	  //}
+	  lookgettick = HAL_GetTick();
+	  SwitchState[0] = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 	  if(mode == 2)
 	  {
 		  if(HAL_GetTick() - TimeStamp >= (1000 + (((22695477*ADCData[0])+ADCData[1])%10000)))
@@ -130,6 +134,20 @@ int main(void)
 			  mode = 3;
 		  }
 	  }
+	  else if(SwitchState[0] == GPIO_PIN_SET && SwitchState[1] == GPIO_PIN_RESET && mode == 3)
+	  {
+		  Timer = HAL_GetTick() - TimeStampForTimer;
+		  mode = 4;
+	  }
+	  SwitchState[1] = SwitchState[0];
+	  //if(SwitchState[0] == GPIO_PIN_SET && SwitchState[1] == GPIO_PIN_RESET)
+	  //{
+		  //mode = 3;
+		  //Timer = HAL_GetTick() - TimeStampForTimer;
+	  //}
+	  //SwitchState[1] = SwitchState[0];
+
+
   }
   /* USER CODE END 3 */
 }
@@ -339,11 +357,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week //เข้าทั้ง กด เเละ ปล่อย
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week //อันนี้ผิด : เข้าทั้ง กด เเละ ปล่อย  //อันนี้ถูก : เหมือนจะเข้าเเค่กด
 {
 	//if(mode == 0)
 	//{
-
 		if(GPIO_Pin == GPIO_PIN_13)     //week //เข้าต่อเมื่อกดเท่านั้น
 		{
 			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);  //week
@@ -362,12 +379,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)   //week //เข้าทั้�
 				mode = 2;
 				TimeStamp = HAL_GetTick();
 			}
-			else if(mode == 3)
-			{
-				Timer = HAL_GetTick() - TimeStampForTimer;
-			}
 
 		}
+		//if(mode == 3)
+		//{
+			//Timer = HAL_GetTick() - TimeStampForTimer;
+		//}
 	//}
 	//else
 	//{
