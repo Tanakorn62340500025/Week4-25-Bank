@@ -49,6 +49,7 @@ UART_HandleTypeDef huart2;
 uint32_t ADCData[4]={0};     //week
 uint32_t TimeStamp = 0;
 uint32_t mode = 0;
+uint32_t Timer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -121,9 +122,10 @@ int main(void)
 	  //}
 	  if(mode == 2)
 	  {
-		  if(HAL_GetTick() - TimeStamp >= 1000)
+		  if(HAL_GetTick() - TimeStamp >= (1000 + (((22695477*ADCData[0])+ADCData[1])%10000)))
 		  {
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+
 		  }
 	  }
   }
